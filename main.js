@@ -105,7 +105,10 @@ cc.game.onStart = function(){
 
     //load resources
     cc.LoaderScene.preload(g_resources, function () {
-        cc.director.runScene(new HelloWorldScene());
+        cc.director.runScene(new Charles06Scene());
     }, this);
+
+    // get focus
+    cc.game.canvas.focus();
 };
 cc.game.run();
