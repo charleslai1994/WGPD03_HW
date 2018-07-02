@@ -86,7 +86,9 @@ var Charles06Layer = cc.Layer.extend({
                         target.goBack();
 
                         break;
-
+                    case 32: //jump
+                    target.jumpUp();
+                    break;
                 }
             },
             // 按鍵放開
@@ -139,6 +141,9 @@ var Charles06Layer = cc.Layer.extend({
 
     getDown:function(){
         this.man.setSpriteFrame(this.manDown[0]);
+    },
+    jumpUp:function(){
+        cc.log("press:jump");
     }
 
 });
