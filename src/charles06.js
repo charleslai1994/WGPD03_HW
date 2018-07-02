@@ -5,6 +5,9 @@ var Charles06Layer = cc.Layer.extend({
     man:null,
     manFrame:new Array(4),
     action:0,
+    manUp:new Array(1),
+    manDown:new Array(1),
+    isRight:true,
     ctor:function () {
 
         this._super();
@@ -25,17 +28,34 @@ var Charles06Layer = cc.Layer.extend({
         // 載入人物動作圖
         var frameCache = cc.spriteFrameCache;
         frameCache.addSpriteFrames(res.man_plist,res.man_png);
-        var img37 = frameCache.getSpriteFrame("image37.png");
-        var img38 = frameCache.getSpriteFrame("image38.png");
-        var img39 = frameCache.getSpriteFrame("image39.png");
-        var img40 = frameCache.getSpriteFrame("image40.png");
-        this.manFrame =[img37,img38,img39,img40];
+        var img79 = frameCache.getSpriteFrame("image79.png");
+        var img80 = frameCache.getSpriteFrame("image80.png");
+        var img81 = frameCache.getSpriteFrame("image81.png");
+        var img82 = frameCache.getSpriteFrame("image82.png");
+        this.manFrame =[img79,img80,img81,img82];
+
+        //人物往上看
+        var frameCache1 = cc.spriteFrameCache;
+        frameCache1.addSpriteFrames(res.manup_plist,res.manup_png);
+        var img3 = frameCache1.getSpriteFrame("image3.png");
+        this.manUp =[img3];
+        this.manUp[0].x = cc.winSize.width/2;
+        this.manUp[0].y = cc.winSize.height/2+80;
+
+        // 人物趴下
+        var frameCache2 = cc.spriteFrameCache;
+        frameCache2.addSpriteFrames(res.mandown_plist,res.mandown_png);
+        var img74 = frameCache1.getSpriteFrame("image74.png");
+        this.manDown =[img74];
+        this.manDown[0].x = cc.winSize.width/2;
+        this.manDown[0].y = cc.winSize.height/2+80;
 
 
 
         this.man = new cc.Sprite(this.manFrame[this.action]);
         this.man.x = cc.winSize.width/2;
-        this.man.y = cc.winSize.height/2+44;
+        this.man.y = cc.winSize.height/2+60;
+        this.man.runAction(cc.flipX(true));
 
 
 
@@ -51,14 +71,22 @@ var Charles06Layer = cc.Layer.extend({
             onKeyPressed:function(keyCode,event){
                 var target = event.getCurrentTarget();
                 switch(keyCode){
+                    case 38: //up
+                        target.watchUp();
+                        break;
+
+                    case 40: //down
+                        target.getDown();
+                        break;
                     case 39: //right
                         target.goForward();
-                        target.man.runAction(cc.flipX(true));
+
                         break;
                     case 37: //left
                         target.goBack();
-                        target.man.runAction(cc.flipX(false));
+
                         break;
+
                 }
             },
             // 按鍵放開
@@ -74,10 +102,13 @@ var Charles06Layer = cc.Layer.extend({
         return true;
     },
 
+
+
     goForward:function(){
         if (this.bg.x + this.bg.width/2 - this.dx >= cc.winSize.width) {
             this.bg.x -= this.dx;
-
+            this.isRight= true;
+            this.man.runAction(cc.flipX(true));
             this.action = this.action == 3 ? 0 : this.action + 1;
             this.man.setSpriteFrame(this.manFrame[this.action]);
         }
@@ -86,18 +117,28 @@ var Charles06Layer = cc.Layer.extend({
             this.man.x +=this.dx;
             this.action = this.action == 3 ? 0 : this.action + 1;
             this.man.setSpriteFrame(this.manFrame[this.action]);
+            this.isRight= true;
         }
     },
     goBack:function(){
         if(this.bg.x - this.bg.width/2 +this.dx <= 0 ){
             this.bg.x += this.dx;
-
+            this.man.runAction(cc.flipX(false));
             this.action = this.action==3?0:this.action+1;
             this.man.setSpriteFrame(this.manFrame[this.action]);
+            this.isRight= false;
         }
 
 
 
+    },
+
+    watchUp:function(){
+        this.man.setSpriteFrame(this.manUp[0]);
+    },
+
+    getDown:function(){
+        this.man.setSpriteFrame(this.manDown[0]);
     }
 
 });
