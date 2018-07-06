@@ -87,12 +87,20 @@ var Charles06Layer = cc.Layer.extend({
 
                         break;
                     case 32: //jump
-                    target.jumpUp();
+                    target.gojump();
                     break;
+
+
                 }
             },
             // 按鍵放開
             onKeyReleased:function(keyCode,event){
+                var target = event.getCurrentTarget();
+                switch(keyCode){
+                    case 32://jump
+                        target.goOrigin();
+                        break;
+                }
 
             }
         },this);
@@ -137,14 +145,25 @@ var Charles06Layer = cc.Layer.extend({
 
     watchUp:function(){
         this.man.setSpriteFrame(this.manUp[0]);
+
     },
 
     getDown:function(){
         this.man.setSpriteFrame(this.manDown[0]);
+
     },
-    jumpUp:function(){
-        cc.log("press:jump");
+
+    gojump:function(){
+        var dy = 70;
+        this.man.x = cc.winSize.width/2;
+        this.man.y = cc.winSize.height/2+60+dy;
+    },
+
+    goOrigin:function(){
+        this.man.x = cc.winSize.width/2;
+        this.man.y = cc.winSize.height/2+60;
     }
+
 
 });
 
